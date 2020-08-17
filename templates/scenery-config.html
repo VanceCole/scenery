@@ -1,0 +1,40 @@
+<form>
+  <div class="form-group">
+    <table class="scenery-table" dir="ltr">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">File</th>
+          <th scope="col">GM</th>
+          <th scope="col">Player</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="scenery-name">
+            <input type="text" name="text" value="Default" data-dtype="String" disabled>
+          </td>
+          <td class="scenery-fp">
+            <div class="form-fields">
+              <input class="image" type="text" value="{{ defaultURL }}" name="defaultBG" data-target="defaultBG" data-dtype="String" />
+
+              <button type="button" title="Browse Files" class="file-picker"
+                data-type="imagevideo" data-target="defaultBG">
+                <i class="fa fa-file-import fa-fw"></i>
+              </button>
+
+            </div>
+          </td>
+          <td class="scenery-gm"><input type="checkbox" name="gm" data-dtype="boolean"></td>
+          <td class="scenery-player"><input type="checkbox" name="player" data-dtype="boolean"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <footer class="sheet-footer flexrow">
+    <button type="submit" name="submit">
+      <i class="fa fa-check"></i> OK
+    </button>
+  </footer>
+</form>
+

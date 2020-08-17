@@ -1,0 +1,8 @@
+table.scenery-table td {
+  line-height: 2em;
+  vertical-align: middle;
+}
+td.scenery-gm,
+td.scenery-player {
+  text-align: center;
+}
