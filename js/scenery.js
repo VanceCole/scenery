@@ -1,21 +1,19 @@
-import SceneryConfig from '../classes/SceneryConfig.js';
-
-const PATH = '/modules/scenery/templates';
+import Scenery from '../classes/Scenery.js';
 
 Hooks.once('init', () => {
-  console.log(`Scenery | Init`);
+  // eslint-disable-next-line no-console
+  console.log('Scenery | Init');
+  loadTemplates(['modules/scenery/templates/variation.html']);
 });
 
 Hooks.on('getSceneNavigationContext', async (html, entryOptions) => {
   const viewOption = {
-    name: "Scenery",
+    name: 'Scenery',
     icon: '<i class="fas fa-images"></i>',
-    condition: (li) => game.user.isGM,
-    callback: (li) => {
-      let sc = new SceneryConfig().render(true);
-      console.log(sc);
-    }
+    condition: () => game.user.isGM,
+    callback: () => {
+      new Scenery().render(true);
+    },
   };
   entryOptions.push(viewOption);
-
 });

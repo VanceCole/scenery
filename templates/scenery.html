@@ -28,6 +28,9 @@
           <td class="scenery-gm"><input type="checkbox" name="gm" data-dtype="boolean"></td>
           <td class="scenery-player"><input type="checkbox" name="player" data-dtype="boolean"></td>
         </tr>
+        {{#each variations}}
+        {{> 'modules/scenery/templates/variation.html'}}
+        {{/each}}
       </tbody>
     </table>
   </div>
