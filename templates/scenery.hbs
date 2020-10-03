@@ -1,4 +1,3 @@
-{{ log this }}
 <form>
   <div class="form-group">
     <table class="scenery-table" dir="ltr">
@@ -12,7 +11,7 @@
       </thead>
       <tbody>
         {{#each variations as |v i|}}
-        {{> 'modules/scenery/templates/variation.hbs' id=i gm=gm pl=pl}}
+        {{> 'modules/scenery/templates/variation.hbs' id=i}}
         {{/each}}
       </tbody>
     </table>

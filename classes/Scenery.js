@@ -26,16 +26,16 @@ export default class Scenery extends FormApplication {
    * @return {Object}   The data provided to the template when rendering the form
    */
   async getData() {
-    const vars = canvas.scene.getFlag('scenery', 'variations');
-    const gm = (vars?.data.gm) ? vars.data.gm : canvas.scene.data.img;
-    const pl = (vars?.data.pl) ? vars.data.pl : canvas.scene.data.img;
+    const flag = canvas.scene.getFlag('scenery', 'variations');
+    const gm = flag.gm || canvas.scene.data.img;
+    const pl = flag.pl || canvas.scene.data.img;
     if (this.variations.length === 0) {
       // Add default variation
       this.variations.push({
         name: 'Default',
         url: canvas.scene.data.img,
       });
-      if (vars?.data) vars.data.forEach((v) => this.variations.push(v));
+      if (flag.variations) flag.variations.forEach((v) => this.variations.push(v));
     }
 
     // Add extra empty variation
@@ -65,16 +65,26 @@ export default class Scenery extends FormApplication {
   }
 
   scan() {
-    console.log(this.variations);
-    alert('scanning');
+    log(this.variations);
   }
 
   add() {
     this.render(true);
   }
 
-  submit(formData) {
-    console.log(formData);
+  async submit(formData) {
+    const variations = Object.values(formData.variations)
+      .slice(1)
+      .filter((v) => v.url && v.name);
+    const gm = formData.variations[formData.gm].url;
+    const pl = formData.variations[formData.pl].url;
+    const data = {
+      variations,
+      gm,
+      pl,
+    };
+    log(data);
+    await canvas.scene.setFlag('scenery', 'variations', data);
     this.close();
   }
 }
