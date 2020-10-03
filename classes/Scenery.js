@@ -1,15 +1,19 @@
-const PATH = '/modules/scenery';
+import { PATH, log } from '../js/helpers.js';
 
 export default class Scenery extends FormApplication {
+  constructor() {
+    super();
+    this.variations = [];
+  }
+
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       classes: ['form'],
-      closeOnSubmit: true,
-      submitOnClose: true,
+      closeOnSubmit: false,
       popOut: true,
       editable: game.user.isGM,
       width: 700,
-      template: `${PATH}/templates/scenery.html`,
+      template: `${PATH}/templates/scenery.hbs`,
       id: 'scenery-config',
       title: game.i18n.localize('Scenery'),
     });
@@ -22,16 +26,22 @@ export default class Scenery extends FormApplication {
    * @return {Object}   The data provided to the template when rendering the form
    */
   async getData() {
-    const variations = [];
-    variations.push({
-      id: 'new',
-      name: '',
-    });
+    const vars = canvas.scene.getFlag('scenery', 'variations');
+    const gm = (vars?.data.gm) ? vars.data.gm : canvas.scene.data.img;
+    const pl = (vars?.data.pl) ? vars.data.pl : canvas.scene.data.img;
+    if (this.variations.length === 0) {
+      // Add default variation
+      this.variations.push({
+        name: 'Default',
+        url: canvas.scene.data.img,
+      });
+      if (vars?.data) vars.data.forEach((v) => this.variations.push(v));
+    }
+
+    // Add extra empty variation
+    this.variations.push({ name: '', url: '' });
     // Return data to the template
-    return {
-      defaultURL: canvas.scene.data.img,
-      variations,
-    };
+    return { variations: this.variations, gm, pl };
   }
 
   /* -------------------------------------------- */
@@ -45,14 +55,26 @@ export default class Scenery extends FormApplication {
 
   /**
    * This method is called upon form submission after form data is validated
-   * @param event {Event}       The initial triggering submission event
-   * @param formData {Object}   The object of validated form data with which to update the object
+   * @param {Event} event      The initial triggering submission event
+   * @param {Object} formData  The object of validated form data with which to update the object
    * @private
    */
   async _updateObject(event, formData) {
-    console.log(formData);
-    Object.entries(formData).forEach(async ([key, val]) => {
+    const fd = expandObject(formData);
+    this[event.submitter.name](fd);
+  }
 
-    });
+  scan() {
+    console.log(this.variations);
+    alert('scanning');
+  }
+
+  add() {
+    this.render(true);
+  }
+
+  submit(formData) {
+    console.log(formData);
+    this.close();
   }
 }

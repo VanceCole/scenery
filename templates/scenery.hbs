@@ -1,0 +1,32 @@
+{{ log this }}
+<form>
+  <div class="form-group">
+    <table class="scenery-table" dir="ltr">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">File</th>
+          <th scope="col">GM</th>
+          <th scope="col">Player</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each variations as |v i|}}
+        {{> 'modules/scenery/templates/variation.hbs' id=i gm=gm pl=pl}}
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+  <footer class="sheet-footer flexrow">
+    <button type="submit" name="scan">
+      <i class="fas fa-search"></i> Scan for Variations
+    </button>
+    <button type="submit" name="add">
+      <i class="fa fa-plus"></i> Add Variation
+    </button>
+    <button type="submit" name="submit">
+      <i class="fa fa-check"></i> OK
+    </button>
+  </footer>
+</form>
+

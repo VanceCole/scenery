@@ -1,3 +1,8 @@
+#scenery-config {
+  height: auto !important;
+  max-height: 500px;
+}
+
 table.scenery-table td {
   line-height: 2em;
   vertical-align: middle;

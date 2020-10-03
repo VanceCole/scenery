@@ -1,0 +1,18 @@
+{{ log this }}
+<tr>
+  <td class="scenery-name">
+    <input type="text" name="variations.{{ id }}.name" value="{{ name }}"
+      placeholder="New Variation" data-dtype="String" {{#if (eq id 0) }}disabled{{/if}}>
+  </td>
+  <td class="scenery-fp">
+    <div class="form-fields">
+      <input class="image" type="text" value="{{ url }}" name="variations.{{ id }}.file" data-target="variation[{{ id }}]-file" data-dtype="String" />
+      <button type="button" title="Browse Files" class="file-picker"
+        data-type="imagevideo" data-target="variations.{{ id }}.file">
+        <i class="fa fa-file-import fa-fw"></i>
+      </button>
+    </div>
+  </td>
+  <td class="scenery-gm"><input {{#if (eq url @root.gm)}}checked{{/if}} type="checkbox" name="variations.{{ id }}.gm" data-dtype="boolean"></td>
+  <td class="scenery-player"><input {{#if (eq url @root.pl)}}checked{{/if}} type="checkbox" name="variations.{{ id }}.pl" data-dtype="boolean"></td>
+</tr>
