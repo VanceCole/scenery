@@ -33,13 +33,13 @@ export default class Scenery extends FormApplication {
       // Add default variation
       this.variations.push({
         name: 'Default',
-        url: canvas.scene.data.img,
+        file: canvas.scene.data.img,
       });
       if (flag.variations) flag.variations.forEach((v) => this.variations.push(v));
     }
 
     // Add extra empty variation
-    this.variations.push({ name: '', url: '' });
+    this.variations.push({ name: '', file: '' });
     // Return data to the template
     return { variations: this.variations, gm, pl };
   }
@@ -73,17 +73,14 @@ export default class Scenery extends FormApplication {
   }
 
   async submit(formData) {
+    const defaultBG = formData.variations[0].file;
     const variations = Object.values(formData.variations)
       .slice(1)
-      .filter((v) => v.url && v.name);
-    const gm = formData.variations[formData.gm].url;
-    const pl = formData.variations[formData.pl].url;
-    const data = {
-      variations,
-      gm,
-      pl,
-    };
-    log(data);
+      .filter((v) => v.file && v.name);
+    const gm = formData.variations[formData.gm].file;
+    const pl = formData.variations[formData.pl].file;
+    const data = { variations, gm, pl };
+    if (canvas.scene.data.img !== defaultBG) await canvas.scene.update({ img: defaultBG });
     await canvas.scene.setFlag('scenery', 'variations', data);
     this.close();
   }
