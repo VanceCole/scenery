@@ -19,6 +19,8 @@ export default class Scenery extends FormApplication {
     });
   }
 
+  close() {}
+
   /* -------------------------------------------- */
 
   /**
@@ -26,14 +28,15 @@ export default class Scenery extends FormApplication {
    * @return {Object}   The data provided to the template when rendering the form
    */
   async getData() {
-    const flag = canvas.scene.getFlag('scenery', 'variations');
+    const flag = canvas.scene.getFlag('scenery', 'data') || {};
+    const bg = flag.bg || canvas.scene.data.img;
     const gm = flag.gm || canvas.scene.data.img;
     const pl = flag.pl || canvas.scene.data.img;
     if (this.variations.length === 0) {
       // Add default variation
       this.variations.push({
         name: 'Default',
-        file: canvas.scene.data.img,
+        file: bg,
       });
       if (flag.variations) flag.variations.forEach((v) => this.variations.push(v));
     }
@@ -47,11 +50,6 @@ export default class Scenery extends FormApplication {
   /* -------------------------------------------- */
   /*  Event Listeners and Handlers                */
   /* -------------------------------------------- */
-
-  /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
-  }
 
   /**
    * This method is called upon form submission after form data is validated
@@ -73,15 +71,38 @@ export default class Scenery extends FormApplication {
   }
 
   async submit(formData) {
-    const defaultBG = formData.variations[0].file;
+    const bg = formData.variations[0].file;
     const variations = Object.values(formData.variations)
       .slice(1)
-      .filter((v) => v.file && v.name);
+      .filter((v) => v.file);
     const gm = formData.variations[formData.gm].file;
     const pl = formData.variations[formData.pl].file;
-    const data = { variations, gm, pl };
-    if (canvas.scene.data.img !== defaultBG) await canvas.scene.update({ img: defaultBG });
-    await canvas.scene.setFlag('scenery', 'variations', data);
+    if (!gm || !pl) {
+      ui.notifications.error('GM & Player view must have a file');
+      return;
+    }
+    const data = { variations, bg, gm, pl };
+    await canvas.scene.update({ img: bg });
+    canvas.scene.setFlag('scenery', 'data', data);
     this.close();
+  }
+
+  static setImage(img, draw = true) {
+    canvas.scene.data.img = img;
+    if (draw) canvas.draw();
+  }
+
+  static _onCanvasInit() {
+    const data = canvas.scene.getFlag('scenery', 'data');
+    if (!data) return;
+    const img = (game.user.isGM) ? data.gm : data.pl;
+    if (img) Scenery.setImage(img, false);
+  }
+
+  static _onUpdateScene(scene, data) {
+    if (hasProperty(data, 'flags.scenery.data')) {
+      const img = (game.user.isGM) ? data.flags.scenery.data.gm : data.flags.scenery.data.pl;
+      if (img) Scenery.setImage(img);
+    }
   }
 }

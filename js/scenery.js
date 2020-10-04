@@ -19,6 +19,9 @@ Hooks.on('getSceneNavigationContext', async (html, entryOptions) => {
   entryOptions.push(viewOption);
 });
 
+Hooks.on('canvasInit', Scenery._onCanvasInit);
+Hooks.on('updateScene', Scenery._onUpdateScene);
+
 // eslint-disable-next-line no-unused-vars
 Handlebars.registerHelper('debug', (data, breakpoint) => {
   // eslint-disable-next-line no-debugger

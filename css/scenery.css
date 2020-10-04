@@ -11,3 +11,8 @@ td.scenery-gm,
 td.scenery-player {
   text-align: center;
 }
+
+.scenery-delete ,
+.scenery-preview {
+  width: 32px;
+}

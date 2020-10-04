@@ -27,6 +27,9 @@ module.exports = {
       'error',
       'stroustrup',
     ],
+    'object-curly-newline': ['error', {
+      ObjectPattern: { multiline: true, minProperties: 4 },
+    }],
   },
   globals: {
     AudioHelper: 'readonly',
