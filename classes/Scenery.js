@@ -105,8 +105,8 @@ export default class Scenery extends FormApplication {
     const variations = Object.values(formData.variations)
       .slice(1)
       .filter((v) => v.file);
-    const gm = formData.variations[formData.gm].file;
-    const pl = formData.variations[formData.pl].file;
+    const gm = formData.variations[formData.gm]?.file;
+    const pl = formData.variations[formData.pl]?.file;
     if (!gm || !pl) {
       ui.notifications.error('GM & Player view must have a file');
       return;
