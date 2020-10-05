@@ -31,6 +31,7 @@ module.exports = {
       ObjectPattern: { multiline: true, minProperties: 4 },
     }],
     'newline-per-chained-call': 'off',
+    'no-plusplus': 'off',
   },
   globals: {
     AudioHelper: 'readonly',

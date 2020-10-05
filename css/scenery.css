@@ -1,9 +1,7 @@
 #scenery-config {
   height: auto !important;
-  max-height: 500px;
+  max-height: 700px;
 }
-
-
 table.scenery-table {
   border: 1px solid #444;
   margin: 0 0 6px 0;
@@ -19,17 +17,14 @@ td.scenery-gm,
 td.scenery-player {
   text-align: center;
 }
-
 .scenery-delete,
 .scenery-preview {
   padding-right: 6px;
 }
-
 .scenery-delete button,
 .scenery-preview button {
   padding: 1px 2px 1px 5px;
   flex: 0 0 32px;
-  margin: 0 5px 0 0;
   line-height: 24px;
   text-align: center;
   background: rgba(0, 0, 0, 0.1);

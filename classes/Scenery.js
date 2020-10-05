@@ -1,4 +1,4 @@
-import { PATH, log } from '../js/helpers.js';
+import { PATH } from '../js/helpers.js';
 
 export default class Scenery extends FormApplication {
   static get defaultOptions() {
@@ -71,10 +71,13 @@ export default class Scenery extends FormApplication {
   * Add a new empty row to the form
   * @param {Object} formData
   */
-  async addVariation(name = '', file = '') {
-    const id = this.element.find('tbody>tr').length;
-    const row = await renderTemplate(`${PATH}/templates/variation.hbs`, { id, name, file });
-    this.element.find('.scenery-table').append(row);
+  async addVariation(name = '', file = '', id = null) {
+    const html = this.element;
+    if (id === null) id = html.find('tbody>tr').length;
+    const row = $(await renderTemplate(`${PATH}/templates/variation.hbs`, { id, name, file }));
+    row.find('.delete').click(() => Scenery.deleteVariation(html));
+    row.find('.preview').click(() => Scenery.previewVariation(html));
+    await html.find('.scenery-table').append(row);
   }
 
   /**
@@ -92,6 +95,7 @@ export default class Scenery extends FormApplication {
    * Scan for variations in current directory of default img
    */
   async scan() {
+    window.t = this;
     const path = this.element.find('[name="variations.0.file"]')[0].value;
     const fp = await FilePicker.browse('data', path);
     const defName = path.split('/').pop().split('.').slice(0, -1).join('.');
@@ -105,9 +109,11 @@ export default class Scenery extends FormApplication {
         }
         return acc;
       }, []);
-    
+    // eslint-disable-next-line no-restricted-syntax
+    let index = this.element.find('tbody>tr').length;
     variations.forEach((v) => {
-      this.addVariation(v.name, v.file);
+      this.addVariation(v.name, v.file, index);
+      index++;
     });
   }
 
@@ -127,8 +133,8 @@ export default class Scenery extends FormApplication {
     const variations = Object.values(formData.variations)
       .slice(1)
       .filter((v) => v.file);
-    const gm = formData.variations[formData.gm]?.file;
-    const pl = formData.variations[formData.pl]?.file;
+    const gm = formData.variations[$('input[name="gm"]:checked').val()]?.file;
+    const pl = formData.variations[$('input[name="gm"]:checked').val()]?.file;
     if (!gm || !pl) {
       ui.notifications.error('GM & Player view must have a file');
       return;
@@ -146,7 +152,10 @@ export default class Scenery extends FormApplication {
    */
   static setImage(img, draw = true) {
     canvas.scene.data.img = img;
-    if (draw) canvas.draw();
+    if (draw) {
+      canvas.draw();
+      setTimeout(() => canvas.draw(), 60);
+    }
   }
 
   /**
