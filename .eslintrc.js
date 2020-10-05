@@ -30,6 +30,7 @@ module.exports = {
     'object-curly-newline': ['error', {
       ObjectPattern: { multiline: true, minProperties: 4 },
     }],
+    'newline-per-chained-call': 'off',
   },
   globals: {
     AudioHelper: 'readonly',

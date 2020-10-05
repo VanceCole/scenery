@@ -7,7 +7,7 @@
   </td>
 
   <td class="scenery-delete">
-    <button class="delete" type="button" title="Delete" index="{{ id }}">
+    <button class="delete" type="button" title="Delete" index="{{ id }}" {{#if (eq id 0) }}disabled{{/if}}>
       <i class="fa fa-trash"></i>
     </button>
   </td>

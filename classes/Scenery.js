@@ -68,6 +68,16 @@ export default class Scenery extends FormApplication {
   }
 
   /**
+  * Add a new empty row to the form
+  * @param {Object} formData
+  */
+  async addVariation(name = '', file = '') {
+    const id = this.element.find('tbody>tr').length;
+    const row = await renderTemplate(`${PATH}/templates/variation.hbs`, { id, name, file });
+    this.element.find('.scenery-table').append(row);
+  }
+
+  /**
    * This method is called upon form submission after form data is validated
    * @param {Event} event      The initial triggering submission event
    * @param {Object} formData  The object of validated form data with which to update the object
@@ -81,19 +91,31 @@ export default class Scenery extends FormApplication {
   /**
    * Scan for variations in current directory of default img
    */
-  scan() {
-    log(this.variations);
+  async scan() {
+    const path = this.element.find('[name="variations.0.file"]')[0].value;
+    const fp = await FilePicker.browse('data', path);
+    const defName = path.split('/').pop().split('.').slice(0, -1).join('.');
+    const variations = fp.files
+      .filter((f) => f !== path)
+      .reduce((acc, file) => {
+        const fn = file.split('/').pop().split('.').slice(0, -1).join('.');
+        if (fn.includes(defName)) {
+          const name = fn.replace(defName, '').replace(/[-_]/g, ' ').trim();
+          acc.push({ file, name });
+        }
+        return acc;
+      }, []);
+    
+    variations.forEach((v) => {
+      this.addVariation(v.name, v.file);
+    });
   }
 
   /**
    * Add a new empty row to the form
-   * @param {Object} formData
    */
-  // eslint-disable-next-line class-methods-use-this
-  async add(formData) {
-    const id = Object.keys(formData.variations).length;
-    const row = await renderTemplate(`${PATH}/templates/variation.hbs`, { id, name: '', file: '' });
-    this.element.find('.scenery-table').append(row);
+  add() {
+    this.addVariation();
   }
 
   /**
