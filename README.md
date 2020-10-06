@@ -11,9 +11,9 @@ A FoundryVTT module that allows easy import and background image changes for var
 ### How to setup variations
 When scanning for variations, scenery works as follows:
 - Based on the default image of the scene (set in core scene configuration)
-- Will find images in the same directory
-- Variations must contain the base file name of the default image, minus the extension
-- Variation names will have special characters removed any any dashes or underscores converted to spaces
+- Will only look for variation images in the same directory
+- Variation file names must contain the base file name of the default image, minus the extension
+- Variation names will have special characters removed and any dashes or underscores converted to spaces
 
 For example, if your default map is `maps/forest-camp/Forest-Camp.jpg`, scenery will find the following:
 - `maps/forest-camp/Forest-Camp-GM.jpg`
