@@ -1,6 +1,6 @@
 {
   "name": "scenery",
-  "title": "Scenery",
+  "title": "Scenery - Background Image Variation Manager",
   "description": "Allows easy import and background image changes for variations such as GM/Player, Night, Seasonal, etc.",
   "author": "Vance Cole",
   "version": "0.1.0",
@@ -19,7 +19,7 @@
       "path": "languages/en.json"
     }
   ],
-  "url": "https://github.com/VanceCole/roofs",
-  "manifest": "https://raw.githubusercontent.com/VanceCole/roofs/master/module.json",
-  "download": "https://github.com/VanceCole/roofs/releases/download/0.0.2/module.zip"
+  "url": "https://github.com/VanceCole/scenery",
+  "manifest": "https://raw.githubusercontent.com/VanceCole/scenery/master/module.json",
+  "download": ""
 }
