@@ -1,4 +1,4 @@
-import { PATH } from '../js/helpers.js';
+import { PATH } from '../helpers.js';
 
 export default class Scenery extends FormApplication {
   static get defaultOptions() {
@@ -95,16 +95,25 @@ export default class Scenery extends FormApplication {
    * Scan for variations in current directory of default img
    */
   async scan() {
-    window.t = this;
+    // Get path fo default img
     const path = this.element.find('[name="variations.0.file"]')[0].value;
+    // Load list of files in current dir
     const fp = await FilePicker.browse('data', path);
+    // Isolate file name and remove extension
     const defName = path.split('/').pop().split('.').slice(0, -1).join('.');
+    // For each file in directory...
     const variations = fp.files
+      // Remove default file
       .filter((f) => f !== path)
+      // Find only files which are derivatives of default
       .reduce((acc, file) => {
+        // Isolate filename and remove extension
         const fn = file.split('/').pop().split('.').slice(0, -1).join('.');
+        // If is a derivative...
         if (fn.includes(defName)) {
-          const name = fn.replace(defName, '').replace(/[-_]/g, ' ').trim();
+          // Remove crud from filename
+          const name = fn.replace(defName, '').replace(/[-_]/g, ' ').replace(/[^a-zA-Z\d\s:]/g, '').trim();
+          // Add to found array
           acc.push({ file, name });
         }
         return acc;
@@ -134,7 +143,7 @@ export default class Scenery extends FormApplication {
       .slice(1)
       .filter((v) => v.file);
     const gm = formData.variations[$('input[name="gm"]:checked').val()]?.file;
-    const pl = formData.variations[$('input[name="gm"]:checked').val()]?.file;
+    const pl = formData.variations[$('input[name="pl"]:checked').val()]?.file;
     if (!gm || !pl) {
       ui.notifications.error('GM & Player view must have a file');
       return;
@@ -150,11 +159,15 @@ export default class Scenery extends FormApplication {
    * @param {String} img   The image URL to be used
    * @param {Boolean} draw Used to prevent draw if being called during canvasInit
    */
-  static setImage(img, draw = true) {
+  static async setImage(img, draw = true) {
     canvas.scene.data.img = img;
     if (draw) {
+      // Wait for texture to load
+      await TextureLoader.loader.load([img], 'Loading Scenery');
       canvas.draw();
-      setTimeout(() => canvas.draw(), 60);
+      // Backup draw because occasionally above seems to fail
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      canvas.draw();
     }
   }
 
@@ -176,7 +189,9 @@ export default class Scenery extends FormApplication {
   static _onUpdateScene(scene, data) {
     if (hasProperty(data, 'flags.scenery.data')) {
       const img = (game.user.isGM) ? data.flags.scenery.data.gm : data.flags.scenery.data.pl;
-      if (img) Scenery.setImage(img);
+      if (img) {
+        Scenery.setImage(img);
+      }
     }
   }
 }

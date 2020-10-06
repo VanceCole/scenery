@@ -1,15 +1,25 @@
 {
   "name": "scenery",
   "title": "Scenery",
-  "description": "Allows you to make scene variations",
+  "description": "Allows easy import and background image changes for variations such as GM/Player, Night, Seasonal, etc.",
   "author": "Vance Cole",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "minimumCoreVersion": "0.6.0",
-  "compatibleCoreVersion": "0.6.4",
+  "compatibleCoreVersion": "0.7.5",
   "esmodules": [
-    "./js/scenery.js"
+    "./scripts/scenery.js"
   ],
   "styles": [
-    "./css/scenery.css"
-  ]
+    "./styles/scenery.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "languages/en.json"
+    }
+  ],
+  "url": "https://github.com/VanceCole/roofs",
+  "manifest": "https://raw.githubusercontent.com/VanceCole/roofs/master/module.json",
+  "download": "https://github.com/VanceCole/roofs/releases/download/0.0.2/module.zip"
 }

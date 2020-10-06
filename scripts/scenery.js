@@ -1,4 +1,4 @@
-import Scenery from '../classes/Scenery.js';
+import Scenery from './classes/Scenery.js';
 import { log } from './helpers.js';
 
 Hooks.once('init', () => {
