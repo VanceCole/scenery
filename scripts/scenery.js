@@ -9,7 +9,7 @@ Hooks.once('init', () => {
 
 Hooks.on('getSceneNavigationContext', async (html, entryOptions) => {
   const viewOption = {
-    name: 'Scenery',
+    name: game.i18n.localize('SCENERY.scenery'),
     icon: '<i class="fas fa-images"></i>',
     condition: () => game.user.isGM,
     callback: () => {

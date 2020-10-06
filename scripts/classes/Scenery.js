@@ -10,7 +10,7 @@ export default class Scenery extends FormApplication {
       width: 700,
       template: `${PATH}/templates/scenery.hbs`,
       id: 'scenery-config',
-      title: game.i18n.localize('Scenery'),
+      title: game.i18n.localize('SCENERY.scenery'),
     });
   }
 
@@ -145,7 +145,7 @@ export default class Scenery extends FormApplication {
     const gm = formData.variations[$('input[name="gm"]:checked').val()]?.file;
     const pl = formData.variations[$('input[name="pl"]:checked').val()]?.file;
     if (!gm || !pl) {
-      ui.notifications.error('GM & Player view must have a file');
+      ui.notifications.error(game.i18n.localize('SCENERY.selectError'));
       return;
     }
     const data = { variations, bg, gm, pl };
@@ -163,7 +163,7 @@ export default class Scenery extends FormApplication {
     canvas.scene.data.img = img;
     if (draw) {
       // Wait for texture to load
-      await TextureLoader.loader.load([img], 'Loading Scenery');
+      await TextureLoader.loader.load([img], game.i18n.localize('SCENERY.loading'));
       canvas.draw();
       // Backup draw because occasionally above seems to fail
       await new Promise((resolve) => setTimeout(resolve, 1000));

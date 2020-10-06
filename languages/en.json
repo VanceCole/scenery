@@ -1,3 +1,12 @@
 {
-
+  "SCENERY.scenery": "Scenery",
+  "SCENERY.scan": "Scan for Variations",
+  "SCENERY.add": "Add Variation",
+  "SCENERY.ok": "OK",
+  "SCENERY.name": "Name",
+  "SCENERY.file": "File",
+  "SCENERY.gm": "GM",
+  "SCENERY.player": "Player",
+  "SCENERY.selectError": "GM & Player must each have a file to display selected",
+  "SCENERY.loading": "Loading Scenery"
 }
