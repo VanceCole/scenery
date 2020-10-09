@@ -7,25 +7,7 @@ Hooks.once('init', () => {
   loadTemplates(['modules/scenery/templates/variation.hbs']);
 });
 
-Hooks.on('getSceneNavigationContext', async (html, entryOptions) => {
-  const viewOption = {
-    name: game.i18n.localize('SCENERY.scenery'),
-    icon: '<i class="fas fa-images"></i>',
-    condition: () => game.user.isGM,
-    callback: () => {
-      new Scenery().render(true);
-    },
-  };
-  entryOptions.push(viewOption);
-});
-
+Hooks.on('getSceneDirectoryEntryContext', Scenery._onContextMenu);
+Hooks.on('getSceneNavigationContext', Scenery._onContextMenu);
 Hooks.on('canvasInit', Scenery._onCanvasInit);
 Hooks.on('updateScene', Scenery._onUpdateScene);
-
-// eslint-disable-next-line no-unused-vars
-Handlebars.registerHelper('debug', (data, breakpoint) => {
-  // eslint-disable-next-line no-debugger
-  debugger;
-});
-
-CONFIG.debug.scenery = true;

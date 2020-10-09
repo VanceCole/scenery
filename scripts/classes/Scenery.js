@@ -1,10 +1,15 @@
 import { PATH } from '../helpers.js';
 
 export default class Scenery extends FormApplication {
+  constructor(id) {
+    super();
+    this.scene = game.scenes.get(id);
+  }
+
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       classes: ['form'],
-      closeOnSubmit: false,
+      closeOnSubmit: true,
       popOut: true,
       editable: game.user.isGM,
       width: 700,
@@ -21,10 +26,10 @@ export default class Scenery extends FormApplication {
    * @return {Object}   The data provided to the template when rendering the form
    */
   async getData() {
-    const flag = canvas.scene.getFlag('scenery', 'data') || {};
-    if (!this.bg) this.bg = flag.bg || canvas.scene.data.img;
-    if (!this.gm) this.gm = flag.gm || canvas.scene.data.img;
-    if (!this.pl) this.pl = flag.pl || canvas.scene.data.img;
+    const flag = this.scene.getFlag('scenery', 'data') || {};
+    if (!this.bg) this.bg = flag.bg || this.scene.data.img;
+    if (!this.gm) this.gm = flag.gm || this.scene.data.img;
+    if (!this.pl) this.pl = flag.pl || this.scene.data.img;
     if (!this.variations) {
       this.variations = [{ name: 'Default', file: this.bg }];
       if (flag.variations) flag.variations.forEach((v) => this.variations.push(v));
@@ -44,6 +49,8 @@ export default class Scenery extends FormApplication {
   activateListeners(html) {
     html.find('.delete').click(() => Scenery.deleteVariation(html));
     html.find('.preview').click(() => Scenery.previewVariation(html));
+    html.find('.scan').click(() => this.scan(html));
+    html.find('.add').click(() => this.add(html));
     super.activateListeners(html);
   }
 
@@ -88,7 +95,19 @@ export default class Scenery extends FormApplication {
    */
   async _updateObject(event, formData) {
     const fd = expandObject(formData);
-    this[event.submitter.name](fd);
+    const bg = fd.variations[0].file;
+    const variations = Object.values(fd.variations)
+      .slice(1)
+      .filter((v) => v.file);
+    const gm = fd.variations[$('input[name="gm"]:checked').val()]?.file;
+    const pl = fd.variations[$('input[name="pl"]:checked').val()]?.file;
+    if (!gm || !pl) {
+      ui.notifications.error(game.i18n.localize('SCENERY.selectError'));
+      return;
+    }
+    const data = { variations, bg, gm, pl };
+    await this.scene.update({ img: bg });
+    this.scene.setFlag('scenery', 'data', data);
   }
 
   /**
@@ -134,27 +153,6 @@ export default class Scenery extends FormApplication {
   }
 
   /**
-   * Validate form input and save to db
-   * @param {Object} formData
-   */
-  async submit(formData) {
-    const bg = formData.variations[0].file;
-    const variations = Object.values(formData.variations)
-      .slice(1)
-      .filter((v) => v.file);
-    const gm = formData.variations[$('input[name="gm"]:checked').val()]?.file;
-    const pl = formData.variations[$('input[name="pl"]:checked').val()]?.file;
-    if (!gm || !pl) {
-      ui.notifications.error(game.i18n.localize('SCENERY.selectError'));
-      return;
-    }
-    const data = { variations, bg, gm, pl };
-    await canvas.scene.update({ img: bg });
-    canvas.scene.setFlag('scenery', 'data', data);
-    this.close();
-  }
-
-  /**
    * Sets background image of the current scene
    * @param {String} img   The image URL to be used
    * @param {Boolean} draw Used to prevent draw if being called during canvasInit
@@ -187,11 +185,25 @@ export default class Scenery extends FormApplication {
    * @param {Object} data
    */
   static _onUpdateScene(scene, data) {
+    if (!scene._view) return;
     if (hasProperty(data, 'flags.scenery.data')) {
       const img = (game.user.isGM) ? data.flags.scenery.data.gm : data.flags.scenery.data.pl;
       if (img) {
         Scenery.setImage(img);
       }
     }
+  }
+
+  static _onContextMenu(html, entryOptions, a, b) {
+    const viewOption = {
+      name: game.i18n.localize('SCENERY.scenery'),
+      icon: '<i class="fas fa-images"></i>',
+      condition: () => game.user.isGM,
+      callback: (el) => {
+        if (el.hasClass('directory-item')) new Scenery(el.attr('data-entity-id')).render(true);
+        if (el.hasClass('nav-item')) new Scenery(el.attr('data-entity-id')).render(true);
+      },
+    };
+    entryOptions.push(viewOption);
   }
 }
