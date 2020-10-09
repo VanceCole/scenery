@@ -194,7 +194,7 @@ export default class Scenery extends FormApplication {
     }
   }
 
-  static _onContextMenu(html, entryOptions, a, b) {
+  static _onContextMenu(html, entryOptions) {
     const viewOption = {
       name: game.i18n.localize('SCENERY.scenery'),
       icon: '<i class="fas fa-images"></i>',

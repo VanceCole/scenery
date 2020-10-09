@@ -3,6 +3,8 @@ A FoundryVTT module that allows easy import and background image changes for var
 
 ![Scenery UI](docs/example.jpg?raw=true "The Scenery UI")
 
+To open the scenery config, right click a scene in either the top scene navigation, or the scenes directory in the sidebar, and select "Scenery".
+
 ### Features
 - Assign variations to be easily switched between
 - Choose a different background to be shown to Players and GM
@@ -15,7 +17,7 @@ When scanning for variations, scenery works as follows:
 - Variation file names must contain the base file name of the default image, minus the extension
 - Variation names will have special characters removed and any dashes or underscores converted to spaces
 
-For example, if your default map is `maps/forest-camp/Forest-Camp.jpg`, scenery will find the following:
+For example, if your default map is `maps/forest-camp/Forest-Camp.jpg`, Scenery will find the following:
 - `maps/forest-camp/Forest-Camp-GM.jpg`
 - `maps/forest-camp/Forest-Camp2.jpg`
 - `maps/forest-camp/2.Forest-Camp.jpg`
