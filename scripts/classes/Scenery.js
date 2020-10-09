@@ -200,8 +200,8 @@ export default class Scenery extends FormApplication {
       icon: '<i class="fas fa-images"></i>',
       condition: () => game.user.isGM,
       callback: (el) => {
-        if (el.hasClass('directory-item')) new Scenery(el.attr('data-entity-id')).render(true);
-        if (el.hasClass('nav-item')) new Scenery(el.attr('data-entity-id')).render(true);
+        const id = el.attr('data-entity-id') || el.attr('data-scene-id');
+        new Scenery(id).render(true);
       },
     };
     entryOptions.push(viewOption);
