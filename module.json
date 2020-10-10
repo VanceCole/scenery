@@ -3,7 +3,7 @@
   "title": "Scenery - Background Image Variation Manager",
   "description": "Allows easy import and background image changes for variations such as GM/Player, Night, Seasonal, etc.",
   "author": "Vance Cole",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "minimumCoreVersion": "0.6.0",
   "compatibleCoreVersion": "0.7.5",
   "esmodules": [

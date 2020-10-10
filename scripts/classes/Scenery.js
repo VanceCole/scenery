@@ -47,10 +47,10 @@ export default class Scenery extends FormApplication {
 
   /** @override */
   activateListeners(html) {
-    html.find('.delete').click(() => Scenery.deleteVariation(html));
-    html.find('.preview').click(() => Scenery.previewVariation(html));
-    html.find('.scan').click(() => this.scan(html));
-    html.find('.add').click(() => this.add(html));
+    html.find('.delete').click(() => this.deleteVariation());
+    html.find('.preview').click(() => this.previewVariation());
+    html.find('.scan').click(() => this.scan());
+    html.find('.add').click(() => this.add());
     super.activateListeners(html);
   }
 
@@ -58,10 +58,9 @@ export default class Scenery extends FormApplication {
    * Display a preview window of the scene
    * @param {HTMLCollection} html the html of the form
    */
-  static previewVariation(html) {
+  previewVariation() {
     const index = document.activeElement.getAttribute('index');
-    window.html = html;
-    const url = html.find(`#scenery-row-${index} .image`)[0].value;
+    const url = this.element.find(`#scenery-row-${index} .image`)[0].value;
     new ImagePopout(url).render(true);
   }
 
@@ -69,9 +68,18 @@ export default class Scenery extends FormApplication {
    * Remove a row in the variation table
    * @param {HTMLCollection} html the html of the form
    */
-  static deleteVariation(html) {
-    const index = document.activeElement.getAttribute('index');
-    html.find(`#scenery-row-${index}`).remove();
+  deleteVariation(index = false) {
+    if (!index) index = document.activeElement.getAttribute('index');
+    this.element.find(`#scenery-row-${index}`).remove();
+  }
+
+  removeBlankVariations() {
+    this.element.find('tr').each((i, el) => {
+      const file = $(el).find('.scenery-fp input').val();
+      const name = $(el).find('.scenery-name input').val();
+      const index = $(el).attr('index');
+      if (!file && !name) this.deleteVariation(index);
+    });
   }
 
   /**
@@ -79,12 +87,11 @@ export default class Scenery extends FormApplication {
   * @param {Object} formData
   */
   async addVariation(name = '', file = '', id = null) {
-    const html = this.element;
-    if (id === null) id = html.find('tbody>tr').length;
+    if (id === null) id = Number(this.element.find('tr:last').attr('index')) + 1;
     const row = $(await renderTemplate(`${PATH}/templates/variation.hbs`, { id, name, file }));
-    row.find('.delete').click(() => Scenery.deleteVariation(html));
-    row.find('.preview').click(() => Scenery.previewVariation(html));
-    await html.find('.scenery-table').append(row);
+    row.find('.delete').click(() => this.deleteVariation());
+    row.find('.preview').click(() => this.previewVariation());
+    await this.element.find('.scenery-table').append(row);
   }
 
   /**
@@ -129,7 +136,7 @@ export default class Scenery extends FormApplication {
         // Isolate filename and remove extension
         const fn = file.split('/').pop().split('.').slice(0, -1).join('.');
         // If is a derivative...
-        if (fn.includes(defName)) {
+        if (fn.toLowerCase().includes(defName.toLowerCase())) {
           // Remove crud from filename
           const name = fn.replace(defName, '').replace(/[-_]/g, ' ').replace(/[^a-zA-Z\d\s:]/g, '').trim();
           // Add to found array
@@ -137,8 +144,9 @@ export default class Scenery extends FormApplication {
         }
         return acc;
       }, []);
+    this.removeBlankVariations();
     // eslint-disable-next-line no-restricted-syntax
-    let index = this.element.find('tbody>tr').length;
+    let index = Number(this.element.find('tr:last').attr('index')) + 1;
     variations.forEach((v) => {
       this.addVariation(v.name, v.file, index);
       index++;

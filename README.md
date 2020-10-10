@@ -32,3 +32,6 @@ Scenery will not consider the following examples to be variations of `maps/fores
 Example how to set up your directory:
 
 ![Filename Example](docs/variations.jpg?raw=true "Filename Example")
+
+### Questions? Suggestions
+Please @vance#1935 on Discord.
