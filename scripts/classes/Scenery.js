@@ -92,6 +92,7 @@ export default class Scenery extends FormApplication {
     row.find('.delete').click(() => this.deleteVariation());
     row.find('.preview').click(() => this.previewVariation());
     await this.element.find('.scenery-table').append(row);
+    super.activateListeners(this.element);
   }
 
   /**
