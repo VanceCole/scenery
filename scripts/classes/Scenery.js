@@ -209,7 +209,7 @@ export default class Scenery extends FormApplication {
       icon: '<i class="fas fa-images"></i>',
       condition: () => game.user.isGM,
       callback: (el) => {
-        const id = el.attr('data-entity-id') || el.attr('data-scene-id');
+        const id = el.attr('data-document-id') || el.attr('data-entity-id') || el.attr('data-scene-id');
         new Scenery(id).render(true);
       },
     };
