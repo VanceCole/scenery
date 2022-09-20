@@ -1,0 +1,12 @@
+{
+  "SCENERY.scenery": "Scenery (decorado)",
+  "SCENERY.scan": "Buscar variantes",
+  "SCENERY.add": "Añadir variante",
+  "SCENERY.ok": "OK",
+  "SCENERY.name": "Nombre",
+  "SCENERY.file": "Archivo",
+  "SCENERY.gm": "GM",
+  "SCENERY.player": "Jugador",
+  "SCENERY.selectError": "Tanto GM como jugador deben seleccionar un fichero que mostrar",
+  "SCENERY.loading": "Cargando Scenery (decorado)"
+}
